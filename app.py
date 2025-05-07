@@ -15,11 +15,13 @@ uvicorn_ws_enabled = os.getenv('UVICORN_WS', 'on') == 'on'
 app = Flask(__name__)
 
 secret_key = 'cdd303f0-d70a-4e36-a9f7-f94a14b59942'
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://avnadmin:AVNS_QHbuDuXH6nTNUi9IvFo@postgres-smartboy.h.aivencloud.com:26207/kafolat?sslmode=require'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@database-01.czmewsoo2jv0.ap-northeast-2.rds.amazonaws.com:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = secret_key
+
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -226,17 +228,21 @@ def lockstatus():
     return redirect(url_for('_'))
 
 def admin_db():
-    hashed_password = bcrypt.generate_password_hash("password123#").decode("utf-8")
-    user = User.query.filter_by(username="smartboy").first()
-    if not user:
-        new_user = User(username="smartboy", password=hashed_password, admin=True)
-        db.session.add(new_user)
-        db.session.commit()
+    with app.app_context():
+        hashed_password = bcrypt.generate_password_hash("password123#").decode("utf-8")
+        user = User.query.filter_by(username="smartboy").first()
+        if not user:
+            new_user = User(username="smartboy", password=hashed_password, admin=True)
+            db.session.add(new_user)
+            db.session.commit()
+            print("Admin user created.")
+        else:
+            print("Admin user already exists.")
 
-asgi_app = WsgiToAsgi(app)
+#asgi_app = WsgiToAsgi(app)
 
-# if __name__ == '__main__':
-#     with app.app_context():
-#         db.create_all()
-#     # admin_db()
-#     app.run()
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    admin_db()
+    app.run(host="0.0.0.0")
