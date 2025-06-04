@@ -32,11 +32,9 @@
             <p><span class="label">Sensor ID:</span> {{ sensor.s_id }}</p>
             <p><span class="label">IP Address:</span> {{ sensor.s_ip }}</p>
             <p>
-                <img src="{{ url_for('static', filename='temp_icon.png') }}" alt="Temperature Icon">
                 <span class="label">Temperature:</span> {{ sensor.s_temperature }} °C
             </p>
             <p>
-                <img src="{{ url_for('static', filename='humidity_icon.png') }}" alt="Humidity Icon">
                 <span class="label">Humidity:</span> {{ sensor.s_humidity }} %
             </p>
         </div>
