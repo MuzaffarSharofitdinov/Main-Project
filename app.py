@@ -205,7 +205,9 @@ def temperature():
             return jsonify({"status": "success"}), 201
         else:
             return jsonify({"status": "failed"}), 404
-    return redirect(url_for('_'))
+    
+    sensor_data = Temperature.query.all()
+    return render_template("temperature.html", sensors=sensor_data)
 
 @app.route('/lockstatus', methods=['GET', 'POST'])
 def lockstatus():
