@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sensor Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sensor {
+            border: 1px solid #ccc;
+            padding: 12px;
+            margin: 10px;
+            border-radius: 8px;
+            max-width: 400px;
+            background-color: #f9f9f9;
+        }
+        .sensor img {
+            width: 24px;
+            vertical-align: middle;
+        }
+        .label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Sensor Data</h1>
+
+    {% for sensor in sensors %}
+        <div class="sensor">
+            <p><span class="label">Sensor ID:</span> {{ sensor.s_id }}</p>
+            <p><span class="label">IP Address:</span> {{ sensor.s_ip }}</p>
+            <p>
+                <img src="{{ url_for('static', filename='temp_icon.png') }}" alt="Temperature Icon">
+                <span class="label">Temperature:</span> {{ sensor.s_temperature }} °C
+            </p>
+            <p>
+                <img src="{{ url_for('static', filename='humidity_icon.png') }}" alt="Humidity Icon">
+                <span class="label">Humidity:</span> {{ sensor.s_humidity }} %
+            </p>
+        </div>
+    {% endfor %}
+</body>
+</html>
